@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import {extractJwtPayload, jwtLocalStorageKey, JwtPayload} from "./utils/jwtUtils";
+import Login from "./login/Login";
+import Feed from "./feed/Feed";
+import styled from "styled-components";
 
 function App() {
+  const [jwtExpired, setJwtExpired] = useState(true);
+
+  const checkTokenExpiration = () => {
+    const jwt = localStorage.getItem(jwtLocalStorageKey);
+    if (jwt) {
+
+      const decoded: JwtPayload = extractJwtPayload(jwt);
+      const expiration = decoded.exp * 1000;
+
+      if (Date.now() > expiration) {
+        setJwtExpired(true);
+      } else {
+        setJwtExpired(false);
+      }
+    } else {
+      setJwtExpired(true);
+    }
+  };
+
+  useEffect(() => {
+    checkTokenExpiration();
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+        <AppContainer>
+          <Content>
+            {
+              jwtExpired ? (
+                  <Login checkExpiration={checkTokenExpiration}/>
+              ) : (
+                  <Feed />
+              )}
+          </Content>
+        </AppContainer>
   );
 }
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+`;
 
 export default App;
