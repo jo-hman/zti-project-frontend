@@ -22,14 +22,14 @@ const Post = ({ post, user }: { post: PostInterface, user: UserModel }) => {
         <PostContainer>
             <TitleContainer>
                 <PostTitle>{post.title}</PostTitle>
-                <PostContent>by: {user.email ?? ''}</PostContent>
+                <PostContent>by: {user === undefined ? '---' : user.email}</PostContent>
             </TitleContainer>
             <PostContent>{post.content}</PostContent>
             <CommentsSection>
                 {post.comments && post.comments.map(comment => (
                     <Comment >
                         <CommentText>{comment.comment}</CommentText>
-                        <CommentAuthor>by: {user.email ?? ''}</CommentAuthor>
+                        <CommentAuthor>by: {user === undefined ? '---' : user.email}</CommentAuthor>
                     </Comment>
                 ))}
             </CommentsSection>
