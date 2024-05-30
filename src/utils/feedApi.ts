@@ -4,7 +4,7 @@ export const defaultHeadersWithAuthorization = (accessCode: string | null) => {
     return {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + accessCode};
 }
 
-const baseUrl = 'http://localhost:8080'
+const baseUrl = 'https://zti-xz6xexabna-lm.a.run.app'
 
 export const usersUrl = baseUrl + '/users';
 export const authorizeUrl = baseUrl + '/users/authorize';
